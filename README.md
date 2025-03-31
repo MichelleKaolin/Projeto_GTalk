@@ -1,38 +1,36 @@
-# 📢 GTalk - Conversão de Áudio para Texto com IA
+# GTalk - Conversão Inteligente de Áudio e Texto com IA
 
-## 📌 Visão Geral
+## Visão Geral
+O GTalk é uma ferramenta inovadora que permite converter áudio em texto e texto em áudio, utilizando Inteligência Artificial para oferecer mais acessibilidade e flexibilidade no aprendizado. 
+Ele se integra ao GeniUs, criando um banco de dados de resumos transcritos e otimizando a experiência com quizzes interativos. 
+Agora, além de transcrever áudios de aulas e palestras, os usuários podem escutar os textos gerados, tornando o estudo mais dinâmico e acessível em qualquer lugar.
 
-**GTalk** é uma extensão que utiliza Inteligência Artificial para transcrever áudios em texto de forma rápida e precisa. A ideia é integrar o projeto com **GeniUs**, criando um banco de dados de resumos de áudio que serão utilizados para aprimorar as questões de quiz e oferecer uma experiência de aprendizado mais dinâmica e acessível. Além disso, o **GTalk** facilita a criação de notas de estudo a partir de qualquer conteúdo falado.
+## Funcionalidades
+- 🎙️ **Gravação e Transcrição de Áudio:** Converte áudios em texto de forma precisa.
+- 🔊 **Leitura em Voz Alta (GeniVoice):** Transforma qualquer texto em áudio para facilitar o estudo em movimento.
+- 🗂️ **Armazenamento Inteligente:** Salva transcrições e áudios organizados para consulta futura.
+- 🎯 **Integração com GeniUs:** Usa os resumos para gerar quizzes personalizados.
+- 📱 **Acessibilidade Total:** Permite estudar com leitura ou audição, otimizando o tempo de aprendizado.
 
-## 🎯 Objetivos
-- **Transcrever áudios em texto** de maneira eficiente utilizando IA.
-- **Integrar com o GeniUs**, criando um banco de dados de conteúdo que aprimora as questões de quiz.
-- **Facilitar o estudo**, permitindo que os alunos transformem áudios de aulas, palestras ou podcasts em texto.
-- **Criar uma interface simples e amigável** para facilitar o uso tanto em dispositivos móveis quanto desktop.
+## Benefícios
+✅ **Aprenda de qualquer lugar:** Leia ou escute os conteúdos no ônibus, na academia ou enquanto realiza outras tarefas.
+✅ **Maior acessibilidade:** Ideal para quem aprende melhor ouvindo ou tem dificuldades para ler textos longos.
+✅ **Otimização do tempo:** Torne qualquer momento produtivo com estudos eficientes.
 
-## 🎯 Funcionalidades
-- 📌 **Gravação de Áudio:** Captura de áudios diretamente no aplicativo ou através de uploads.
-- 📌 **Transcrição Instantânea:** O áudio é convertido em texto automaticamente.
-- 📌 **Armazenamento de Texto:** O texto transcrito é salvo em um banco de dados, criando uma base de conteúdo.
-- 📌 **Integração com GeniUs:** O texto gerado é utilizado para criar questões de quiz e desafios diários.
-- 📌 **Interface Simples e Intuitiva:** Design focado na usabilidade, garantindo que a transcrição seja rápida e sem complicação.
+## Como Usar
+1. **Gravação e Transcrição:** Grave um áudio e deixe o GTalk transcrevê-lo automaticamente.
+2. **Leitura em Voz Alta:** Selecione um texto e ative a função GeniVoice para ouvir o conteúdo.
+3. **Salvamento e Organização:** Todos os resumos e áudios ficam armazenados para consulta futura.
 
-## 🛠️ Tecnologias Utilizadas
-| Componente        | Tecnologia                 |
-|-------------------|----------------------------|
-| **Frontend**      | React.js / Flutter         |
-| **Backend**       | Node.js + Express          |
-| **API de Áudio**  | Google Speech-to-Text API  |
-| **Banco de Dados**| Firebase / PostgreSQL      |
-| **Autenticação**  | Firebase Authentication    |
+## Tecnologias Utilizadas
+- Python
+- Speech-to-Text API
+- Text-to-Speech (TTS) API
+- Integração com GeniUs
 
-## 🏗️ Arquitetura do Sistema
-```plaintext
-🎤 Gravação de Áudio (App Web/Mobile)
-   |
-   🔗 API Backend (Node.js)
-   |
-   🛢️ Banco de Dados (Firestore/PostgreSQL)
-   |
-   🤖 Transcrição de Áudio (Google Speech API)
-****
+## Contribuição
+Sinta-se à vontade para contribuir com melhorias! Basta abrir uma _issue_ ou enviar um _pull request_.
+
+---
+
+🚀 **GTalk** - Transforme seu aprendizado em uma experiência completa!
