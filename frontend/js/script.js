@@ -6,6 +6,13 @@ let currentUser = null;
 
 /* ── Helpers ─────────────────────────────────────────────────────────────── */
 
+function escapeHTML(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.appendChild(document.createTextNode(str));
+  return div.innerHTML;
+}
+
 async function apiFetch(path, options = {}) {
   const headers = options.headers || {};
   if (authToken) headers['Authorization'] = 'Bearer ' + authToken;
@@ -182,10 +189,10 @@ async function loadDashboardData() {
       recentEl.innerHTML = data.recent_transcriptions.slice(0, 5).map(t => `
         <div class="tr-card fu">
           <div class="tr-header">
-            <div class="tr-title">${t.title}</div>
-            <div class="tr-time">${formatRelativeDate(t.created_at)}</div>
+            <div class="tr-title">${escapeHTML(t.title)}</div>
+            <div class="tr-time">${escapeHTML(formatRelativeDate(t.created_at))}</div>
           </div>
-          <div class="tr-text">${t.word_count} palavras ${t.duration_seconds ? '| ' + formatDuration(t.duration_seconds) : ''} | Status: ${t.status}</div>
+          <div class="tr-text">${escapeHTML(String(t.word_count))} palavras ${t.duration_seconds ? '| ' + escapeHTML(formatDuration(t.duration_seconds)) : ''} | Status: ${escapeHTML(t.status)}</div>
           <div class="tr-actions">
             <button class="ta-btn ta-play" onclick="sv('tts')">&#9654; Ouvir</button>
             <button class="ta-btn ta-quiz" onclick="toast('Quiz gerado no GeniUs!')">&#9889; Gerar Quiz</button>
@@ -213,14 +220,14 @@ async function loadTranscriptionsList() {
       listEl.innerHTML = data.items.map(t => `
         <div class="tr-card fu">
           <div class="tr-header">
-            <div class="tr-title">${t.title}</div>
-            <div class="tr-time">${formatRelativeDate(t.created_at)} ${t.duration_seconds ? '| ' + formatDuration(t.duration_seconds) : ''}</div>
+            <div class="tr-title">${escapeHTML(t.title)}</div>
+            <div class="tr-time">${escapeHTML(formatRelativeDate(t.created_at))} ${t.duration_seconds ? '| ' + escapeHTML(formatDuration(t.duration_seconds)) : ''}</div>
           </div>
-          <div class="tr-text">${t.transcribed_text ? t.transcribed_text.substring(0, 200) + '...' : '(Pendente)'}</div>
+          <div class="tr-text">${t.transcribed_text ? escapeHTML(t.transcribed_text.substring(0, 200)) + '...' : '(Pendente)'}</div>
           <div class="tr-actions">
             <button class="ta-btn ta-play" onclick="sv('tts')">&#9654; Ouvir</button>
             <button class="ta-btn ta-quiz" onclick="toast('Quiz gerado!')">&#9889; Quiz</button>
-            <button class="ta-btn ta-del" onclick="deleteTranscription('${t.id}')">&#128465; Remover</button>
+            <button class="ta-btn ta-del" onclick="deleteTranscription('${escapeHTML(t.id)}')">&#128465; Remover</button>
           </div>
         </div>
       `).join('');
