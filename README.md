@@ -1,36 +1,50 @@
-# GTalk - Conversão Inteligente de Áudio e Texto com IA
+# GTalk - Intelligent Audio and Text Conversion with AI
 
-## Visão Geral
-O GTalk é uma ferramenta inovadora que permite converter áudio em texto e texto em áudio, utilizando Inteligência Artificial para oferecer mais acessibilidade e flexibilidade no aprendizado. 
-Ele se integra ao GeniUs, criando um banco de dados de resumos transcritos e otimizando a experiência com quizzes interativos. 
-Agora, além de transcrever áudios de aulas e palestras, os usuários podem escutar os textos gerados, tornando o estudo mais dinâmico e acessível em qualquer lugar.
+## Overview
 
-## Funcionalidades
-- 🎙️ **Gravação e Transcrição de Áudio:** Converte áudios em texto de forma precisa.
-- 🔊 **Leitura em Voz Alta (GeniVoice):** Transforma qualquer texto em áudio para facilitar o estudo em movimento.
-- 🗂️ **Armazenamento Inteligente:** Salva transcrições e áudios organizados para consulta futura.
-- 🎯 **Integração com GeniUs:** Usa os resumos para gerar quizzes personalizados.
-- 📱 **Acessibilidade Total:** Permite estudar com leitura ou audição, otimizando o tempo de aprendizado.
-
-## Benefícios
-✅ **Aprenda de qualquer lugar:** Leia ou escute os conteúdos no ônibus, na academia ou enquanto realiza outras tarefas.
-✅ **Maior acessibilidade:** Ideal para quem aprende melhor ouvindo ou tem dificuldades para ler textos longos.
-✅ **Otimização do tempo:** Torne qualquer momento produtivo com estudos eficientes.
-
-## Como Usar
-1. **Gravação e Transcrição:** Grave um áudio e deixe o GTalk transcrevê-lo automaticamente.
-2. **Leitura em Voz Alta:** Selecione um texto e ative a função GeniVoice para ouvir o conteúdo.
-3. **Salvamento e Organização:** Todos os resumos e áudios ficam armazenados para consulta futura.
-
-## Tecnologias Utilizadas
-- Python
-- Speech-to-Text API
-- Text-to-Speech (TTS) API
-- Integração com GeniUs
-
-## Contribuição
-Sinta-se à vontade para contribuir com melhorias! Basta abrir uma _issue_ ou enviar um _pull request_.
+GTalk is an innovative tool that enables the conversion of audio to text and text to audio, using Artificial Intelligence to provide greater accessibility and flexibility in learning. It integrates with GeniUs, creating a database of transcribed summaries and enhancing the experience with interactive quizzes. In addition to transcribing lectures and presentations, users can also listen to generated texts, making studying more dynamic and accessible anywhere.
 
 ---
 
-🚀 **GTalk** - Transforme seu aprendizado em uma experiência completa!
+## Features
+
+🎙️ **Audio Recording and Transcription**: Converts audio into text with high accuracy.
+🔊 **Text-to-Speech (GeniVoice)**: Transforms any text into audio for easier on-the-go studying.
+🗂️ **Smart Storage**: Saves transcriptions and audio files in an organized way for future access.
+🎯 **GeniUs Integration**: Uses summaries to generate personalized quizzes.
+📱 **Full Accessibility**: Allows studying through reading or listening, optimizing learning time.
+
+---
+
+## Benefits
+
+✅ **Learn from anywhere**: Read or listen to content on the bus, at the gym, or while doing other tasks.
+✅ **Greater accessibility**: Ideal for those who learn better by listening or struggle with long texts.
+✅ **Time optimization**: Turn any moment into productive study time with efficient learning.
+
+---
+
+## How to Use
+
+* **Recording and Transcription**: Record audio and let GTalk automatically transcribe it.
+* **Text-to-Speech**: Select a text and activate GeniVoice to listen to the content.
+* **Saving and Organization**: All summaries and audio files are stored for future reference.
+
+---
+
+## Technologies Used
+
+* Python
+* Speech-to-Text API
+* Text-to-Speech (TTS) API
+* GeniUs Integration
+
+---
+
+## Contribution
+
+Feel free to contribute with improvements! Just open an issue or submit a pull request.
+
+---
+
+🚀 **GTalk - Transform your learning into a complete experience!**
