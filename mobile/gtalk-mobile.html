@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>GTalk Mobile</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --teal:#00D9B5;--purple:#8B5CF6;--pink:#FF4081;--amber:#FFB300;--sky:#00B4D8;
+  --bg:#060612;--bg2:#0D0D20;--bg3:#141428;--card:#18182E;--border:rgba(255,255,255,0.08);
+  --text:#EEF0FF;--text2:#7878AA;--text3:#303050;
+  --safe-bottom:env(safe-area-inset-bottom,20px);
+}
+body.light{
+  --bg:#F0F4FF;--bg2:#E5EAFF;--bg3:#D8DEFF;--card:#FFFFFF;--border:rgba(0,0,60,0.08);
+  --text:#0A0A30;--text2:#4A5080;--text3:#9090C0;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Space Grotesk',sans-serif;background:#000;color:var(--text);}
+
+/* SHELL */
+.shell{
+  width:390px;height:844px;margin:0 auto;background:var(--bg);
+  border-radius:54px;overflow:hidden;position:relative;
+  box-shadow:0 40px 120px rgba(0,0,0,.9),0 0 0 12px #1a1a1a,0 0 0 14px #2a2a2a;
+  display:flex;flex-direction:column;
+}
+.island{width:126px;height:37px;background:#000;border-radius:0 0 22px 22px;position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:200;display:flex;align-items:center;justify-content:center;gap:8px;}
+.island-cam{width:12px;height:12px;border-radius:50%;background:#1a1a1a;border:2px solid #333;}
+.island-dot{width:8px;height:8px;border-radius:50%;background:#1a1a1a;}
+.statusbar{height:54px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 28px 8px;flex-shrink:0;position:relative;z-index:10;}
+.sb-time{font-size:15px;font-weight:700;font-family:'Fraunces',sans-serif;}
+.sb-icons{display:flex;align-items:center;gap:6px;font-size:13px;}
+.app-content{flex:1;overflow:hidden;position:relative;}
+.screen{position:absolute;inset:0;overflow-y:auto;display:none;flex-direction:column;}
+.screen.active{display:flex;}
+.screen::-webkit-scrollbar{display:none;}
+.bottom-nav{height:calc(58px + var(--safe-bottom));background:var(--bg2);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;padding:0 8px calc(var(--safe-bottom)+4px);flex-shrink:0;position:relative;z-index:50;}
+.bn-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 10px;border-radius:16px;cursor:pointer;transition:all .2s;font-size:10px;font-weight:700;color:var(--text3);flex:1;text-align:center;letter-spacing:.3px;}
+.bn-item.active{color:var(--teal);}
+.bn-icon{font-size:22px;transition:transform .2s;}
+.bn-item.active .bn-icon{transform:scale(1.15);}
+.bn-item:active .bn-icon{transform:scale(.9);}
+
+/* SPLASH */
+#splash{
+  align-items:center;justify-content:center;
+  background:radial-gradient(ellipse 300px 280px at 70% 30%,rgba(0,217,181,.18),transparent),
+             radial-gradient(ellipse 250px 250px at 25% 70%,rgba(139,92,246,.15),transparent),var(--bg);
+}
+.sp-logo{font-family:'Fraunces',sans-serif;font-size:62px;font-weight:900;letter-spacing:-2px;margin-bottom:8px;color:var(--text);}
+.sp-logo em{font-style:normal;color:var(--teal);}
+.sp-tag{color:var(--text2);font-size:16px;margin-bottom:64px;}
+.sp-loader{width:52px;height:5px;background:var(--bg3);border-radius:3px;overflow:hidden;}
+.sp-bar{height:100%;background:linear-gradient(90deg,var(--teal),var(--purple));border-radius:3px;animation:spload 2.2s ease forwards;}
+@keyframes spload{from{width:0}to{width:100%}}
+
+/* ONBOARDING */
+#onboard{background:var(--bg);overflow:hidden;}
+.ob-slides{display:flex;transition:transform .45s cubic-bezier(.4,0,.2,1);width:300%;}
+.ob-slide{width:33.333%;padding:56px 32px 32px;display:flex;flex-direction:column;align-items:center;text-align:center;flex-shrink:0;}
+.ob-emoji{font-size:84px;margin-bottom:28px;animation:obfloat 3.5s ease-in-out infinite;}
+@keyframes obfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.ob-title{font-family:'Fraunces',sans-serif;font-size:30px;font-weight:900;margin-bottom:14px;line-height:1.05;}
+.ob-desc{font-size:16px;color:var(--text2);line-height:1.65;max-width:280px;}
+.ob-dots{display:flex;gap:8px;margin:auto 0 28px;}
+.ob-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:all .35s;}
+.ob-dot.active{width:28px;border-radius:4px;background:var(--teal);}
+.ob-cta{width:calc(100% - 64px);padding:18px;border-radius:18px;background:linear-gradient(135deg,var(--teal),var(--sky));color:#000;font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;border:none;cursor:pointer;margin-bottom:8px;box-shadow:0 8px 28px rgba(0,217,181,.4);}
+.ob-skip{background:none;border:none;color:var(--text3);font-size:15px;cursor:pointer;padding:10px;}
+
+/* AUTH */
+#auth{background:var(--bg);}
+.auth-top{padding:56px 28px 24px;text-align:center;}
+.auth-logo{font-family:'Fraunces',sans-serif;font-size:44px;font-weight:900;letter-spacing:-1px;margin-bottom:8px;}
+.auth-logo em{font-style:normal;color:var(--teal);}
+.auth-tagline{color:var(--text2);font-size:15px;}
+.auth-tabs{display:flex;margin:0 28px 24px;background:var(--bg3);border-radius:14px;padding:4px;}
+.at-btn{flex:1;padding:12px;border-radius:11px;font-weight:700;font-size:15px;cursor:pointer;border:none;background:transparent;color:var(--text2);transition:all .2s;}
+.at-btn.active{background:var(--card);color:var(--text);}
+.auth-body{padding:0 28px 32px;}
+.auth-body.hide{display:none;}
+.fg{margin-bottom:16px;}
+.fg label{display:block;font-size:11px;font-weight:700;color:var(--text2);margin-bottom:8px;letter-spacing:.8px;text-transform:uppercase;}
+.fg input{width:100%;padding:16px;border-radius:14px;border:1.5px solid var(--border);background:var(--bg3);color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:16px;outline:none;transition:all .2s;}
+.fg input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,217,181,.15);}
+.auth-cta{width:100%;padding:18px;border-radius:16px;background:linear-gradient(135deg,var(--teal),var(--sky));color:#000;font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;border:none;cursor:pointer;box-shadow:0 8px 28px rgba(0,217,181,.35);margin-top:6px;}
+.auth-cta:active{transform:scale(.97);}
+
+/* TOPBAR */
+.topbar{padding:12px 22px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20;background:var(--bg);}
+.tb-logo{font-family:'Fraunces',sans-serif;font-size:22px;font-weight:900;letter-spacing:-1px;}
+.tb-logo em{font-style:normal;color:var(--teal);}
+.tb-r{display:flex;gap:10px;}
+.icon-btn{width:36px;height:36px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;}
+
+/* HOME SCREEN */
+#home .scroll{padding:0 20px 100px;}
+.scroll{flex:1;overflow-y:auto;}
+.scroll::-webkit-scrollbar{display:none;}
+
+.welcome-msg{font-family:'Fraunces',sans-serif;font-size:26px;font-weight:900;margin-bottom:4px;}
+.welcome-sub{font-size:14px;color:var(--text2);margin-bottom:20px;}
+.kpi-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;position:relative;overflow:hidden;}
+.kpi::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--accent);}
+.kpi-val{font-family:'Fraunces',sans-serif;font-size:32px;font-weight:900;line-height:1;}
+.kpi-label{font-size:11px;font-weight:700;color:var(--text2);margin-top:6px;text-transform:uppercase;letter-spacing:.5px;}
+
+.sec-title{font-family:'Fraunces',sans-serif;font-size:18px;font-weight:900;margin-bottom:14px;}
+.quick-action-row{display:flex;gap:10px;margin-bottom:20px;}
+.qa{flex:1;border-radius:18px;padding:18px 14px;cursor:pointer;transition:all .25s;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;}
+.qa:active{transform:scale(.95);}
+.qa-icon{font-size:30px;}
+.qa-label{font-size:12px;font-weight:700;color:#fff;}
+
+.recent-list{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.rec-item{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;}
+.ri-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;}
+.ri-title{font-weight:700;font-size:15px;flex:1;padding-right:8px;line-height:1.3;}
+.ri-time{font-size:11px;color:var(--text2);white-space:nowrap;margin-top:2px;}
+.ri-preview{font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:12px;}
+.ri-actions{display:flex;gap:8px;}
+.ri-btn{padding:8px 14px;border-radius:50px;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:all .2s;}
+.ri-btn:active{transform:scale(.95);}
+.btn-play{background:rgba(0,217,181,.15);color:var(--teal);}
+.btn-quiz{background:rgba(139,92,246,.15);color:var(--purple);}
+
+/* RECORD SCREEN */
+#record .scroll{padding:0 20px 100px;}
+.rec-center{display:flex;flex-direction:column;align-items:center;padding-top:20px;}
+.big-btn{
+  width:120px;height:120px;border-radius:50%;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  border:none;cursor:pointer;font-size:52px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 0 0 rgba(255,64,129,.4);
+  transition:all .3s;margin:0 auto 24px;
+}
+.big-btn.recording{animation:rec-pulse 1.4s infinite;background:linear-gradient(135deg,#FF0040,#FF4081);}
+@keyframes rec-pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,64,129,.5)}50%{box-shadow:0 0 0 28px rgba(255,64,129,0)}}
+.rec-title{font-family:'Fraunces',sans-serif;font-size:22px;font-weight:900;margin-bottom:4px;text-align:center;}
+.rec-timer{font-family:'Fraunces',sans-serif;font-size:52px;font-weight:900;color:var(--teal);margin:12px 0;text-align:center;letter-spacing:2px;}
+.wave-row{display:flex;align-items:center;justify-content:center;gap:4px;height:44px;margin:8px 0 32px;}
+.wv-bar{width:5px;border-radius:3px;transition:height .15s ease;animation:wv 1.1s ease infinite;}
+@keyframes wv{0%,100%{height:8px}50%{height:calc(8px + var(--h,14px))}}
+.rec-tip{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;margin-bottom:14px;width:100%;}
+.rt-title{font-weight:700;font-size:15px;margin-bottom:10px;}
+.rt-item{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--text2);margin-bottom:8px;}
+.upload-box{background:var(--bg3);border:2px dashed var(--border);border-radius:18px;padding:28px;text-align:center;cursor:pointer;transition:all .2s;}
+.upload-box:active{border-color:var(--teal);}
+.ub-icon{font-size:36px;margin-bottom:10px;}
+.ub-text{font-weight:700;font-size:15px;margin-bottom:4px;}
+.ub-sub{font-size:13px;color:var(--text2);}
+
+/* LIBRARY SCREEN */
+#library .scroll{padding:0 20px 100px;}
+.search-bar{display:flex;align-items:center;gap:10px;background:var(--bg3);border-radius:14px;padding:12px 16px;margin-bottom:16px;border:1.5px solid var(--border);}
+.search-bar input{flex:1;background:transparent;border:none;outline:none;font-family:'Space Grotesk',sans-serif;font-size:15px;color:var(--text);}
+.lib-folders{display:flex;gap:10px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px;}
+.lib-folders::-webkit-scrollbar{display:none;}
+.lib-folder{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:14px 16px;flex-shrink:0;cursor:pointer;transition:all .2s;text-align:center;min-width:90px;}
+.lib-folder:active{transform:scale(.95);}
+.lf-icon{font-size:24px;margin-bottom:6px;}
+.lf-name{font-size:11px;font-weight:700;color:var(--text2);}
+.lf-count{font-size:11px;color:var(--text3);}
+
+/* TTS SCREEN */
+#tts .scroll{padding:0 20px 100px;}
+.tts-area{background:var(--card);border:1.5px solid var(--border);border-radius:20px;padding:18px;margin-bottom:16px;}
+.tts-label{font-size:12px;font-weight:700;color:var(--text2);margin-bottom:10px;text-transform:uppercase;letter-spacing:.8px;}
+textarea{width:100%;min-height:140px;padding:14px;border-radius:14px;border:1.5px solid var(--border);background:var(--bg3);color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:15px;line-height:1.6;outline:none;resize:none;transition:all .2s;}
+textarea:focus{border-color:var(--teal);}
+.voice-chips{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.vc{padding:8px 14px;border-radius:50px;font-size:13px;font-weight:700;border:1.5px solid var(--border);background:var(--bg3);color:var(--text2);cursor:pointer;transition:all .2s;}
+.vc.active{background:var(--teal);color:#000;border-color:transparent;}
+.speed-row{display:flex;align-items:center;gap:14px;margin-bottom:18px;padding:14px;background:var(--bg3);border-radius:14px;}
+.speed-row span{font-size:14px;font-weight:700;color:var(--text2);}
+.speed-row input{flex:1;accent-color:var(--teal);}
+.speed-val{color:var(--teal);font-weight:700;min-width:38px;text-align:right;}
+.tts-play-btn{width:100%;padding:18px;border-radius:16px;background:linear-gradient(135deg,var(--teal),var(--sky));color:#000;font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;border:none;cursor:pointer;box-shadow:0 8px 24px rgba(0,217,181,.35);margin-bottom:14px;}
+.tts-play-btn:active{transform:scale(.97);}
+.playing-pill{display:none;align-items:center;gap:10px;background:rgba(0,217,181,.1);border:1px solid rgba(0,217,181,.2);border-radius:50px;padding:12px 20px;}
+.playing-pill.on{display:flex;}
+.pp-bars{display:flex;align-items:center;gap:3px;height:18px;}
+.pp-bar{width:3px;border-radius:2px;background:var(--teal);animation:wv 1s ease infinite;}
+.pp-text{color:var(--teal);font-weight:700;font-size:14px;}
+.pp-stop{margin-left:auto;background:none;border:none;color:var(--text2);font-size:18px;cursor:pointer;}
+
+/* PROFILE */
+#profile .scroll{padding:0 0 100px;}
+.pf-header{background:linear-gradient(160deg,rgba(0,217,181,.12) 0%,var(--bg) 100%);padding:24px 24px 28px;text-align:center;}
+.pf-av{width:78px;height:78px;border-radius:24px;background:linear-gradient(135deg,var(--teal),var(--sky));margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:800;color:#000;}
+.pf-name{font-family:'Fraunces',sans-serif;font-size:22px;font-weight:900;margin-bottom:4px;}
+.pf-tag{font-size:13px;color:var(--teal);font-weight:700;}
+.pf-stats{display:flex;border-top:1px solid var(--border);margin-top:20px;}
+.pfs-item{flex:1;padding:14px 0;text-align:center;}
+.pfs-item+.pfs-item{border-left:1px solid var(--border);}
+.pfs-val{font-family:'Fraunces',sans-serif;font-size:20px;font-weight:900;}
+.pfs-label{font-size:10px;color:var(--text2);font-weight:700;margin-top:2px;}
+.pf-section{padding:20px 22px 0;}
+.pfs-sec-title{font-family:'Fraunces',sans-serif;font-size:16px;font-weight:900;margin-bottom:14px;}
+.pf-row{display:flex;align-items:center;gap:14px;padding:16px;background:var(--card);border-radius:16px;border:1px solid var(--border);margin-bottom:10px;cursor:pointer;}
+.pf-row:active{transform:scale(.98);}
+.pr-ico{width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.pr-t{flex:1;}
+.pr-name{font-weight:700;font-size:15px;}
+.pr-sub{font-size:12px;color:var(--text2);margin-top:2px;}
+.pr-arr{font-size:18px;color:var(--text3);}
+.th-row{display:flex;align-items:center;gap:14px;padding:16px;background:var(--card);border-radius:16px;border:1px solid var(--border);margin-bottom:10px;}
+.toggle{width:50px;height:28px;border-radius:14px;background:var(--bg3);border:1px solid var(--border);cursor:pointer;position:relative;transition:background .3s;margin-left:auto;}
+.toggle.on{background:var(--teal);}
+.toggle-k{width:22px;height:22px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:transform .3s;box-shadow:0 2px 6px rgba(0,0,0,.3);}
+.toggle.on .toggle-k{transform:translateX(22px);}
+
+/* Toast */
+.toasts{position:fixed;bottom:calc(80px + var(--safe-bottom));left:50%;transform:translateX(-50%);z-index:999;pointer-events:none;display:flex;flex-direction:column;gap:8px;align-items:center;}
+.toast{background:var(--card);border:1px solid var(--border);border-radius:50px;padding:12px 22px;font-size:14px;font-weight:700;white-space:nowrap;animation:toastIn .3s ease;box-shadow:0 8px 28px rgba(0,0,0,.4);}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.fi{animation:fadeIn .4s ease forwards;}
+
+@media(max-width:420px){
+  .shell{width:100vw;height:100dvh;border-radius:0;box-shadow:none;}
+  body{background:var(--bg);}
+  .island{display:none;}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="island"><div class="island-dot"></div><div class="island-cam"></div></div>
+  <div class="statusbar">
+    <span class="sb-time" id="sbTime">9:41</span>
+    <div class="sb-icons"><span>●●●</span><span>WiFi</span><span>🔋</span></div>
+  </div>
+  <div class="app-content">
+
+    <!-- SPLASH -->
+    <div class="screen active" id="splash">
+      <div class="sp-logo"><em>G</em>Talk</div>
+      <div class="sp-tag">Transcreva. Ouça. Aprenda.</div>
+      <div class="sp-loader"><div class="sp-bar"></div></div>
+    </div>
+
+    <!-- ONBOARDING -->
+    <div class="screen" id="onboard">
+      <div class="ob-slides" id="obSlides">
+        <div class="ob-slide">
+          <div class="ob-emoji">🎙️</div>
+          <div class="ob-title" style="color:var(--teal)">Grave suas Aulas</div>
+          <div class="ob-desc">Capture qualquer áudio — aulas, palestras, podcasts — e transforme em texto automaticamente.</div>
+        </div>
+        <div class="ob-slide">
+          <div class="ob-emoji">🔊</div>
+          <div class="ob-title" style="color:var(--purple)">Ouça em Qualquer Lugar</div>
+          <div class="ob-desc">GeniVoice lê qualquer texto em voz alta para você estudar no ônibus, academia ou onde quiser.</div>
+        </div>
+        <div class="ob-slide">
+          <div class="ob-emoji">🎯</div>
+          <div class="ob-title" style="color:var(--pink)">Gere Quizzes com IA</div>
+          <div class="ob-desc">Integração com GeniUs: crie quizzes automáticos a partir das suas transcrições com 1 toque.</div>
+        </div>
+      </div>
+      <div class="ob-dots" id="obDots">
+        <div class="ob-dot active"></div><div class="ob-dot"></div><div class="ob-dot"></div>
+      </div>
+      <button class="ob-cta" id="obBtn" onclick="obNext()">Continuar →</button>
+      <button class="ob-skip" onclick="goAuth()">Pular</button>
+    </div>
+
+    <!-- AUTH -->
+    <div class="screen" id="auth">
+      <div class="auth-top">
+        <div class="auth-logo"><em>G</em>Talk</div>
+        <div class="auth-tagline">Sua ferramenta de transcrição inteligente</div>
+      </div>
+      <div class="auth-tabs">
+        <button class="at-btn active" id="at-li" onclick="authTab('li')">Entrar</button>
+        <button class="at-btn" id="at-su" onclick="authTab('su')">Cadastrar</button>
+      </div>
+      <div class="auth-body" id="ab-li">
+        <div class="fg"><label>Email</label><input type="email" placeholder="seu@email.com"></div>
+        <div class="fg"><label>Senha</label><input type="password" placeholder="••••••••"></div>
+        <button class="auth-cta" onclick="doLogin()">Entrar no GTalk →</button>
+      </div>
+      <div class="auth-body hide" id="ab-su">
+        <div class="fg"><label>Nome</label><input type="text" placeholder="Seu nome"></div>
+        <div class="fg"><label>Email</label><input type="email" placeholder="seu@email.com"></div>
+        <div class="fg"><label>Senha</label><input type="password" placeholder="Mín. 8 caracteres"></div>
+        <button class="auth-cta" onclick="doLogin()">Criar conta grátis 🎙️</button>
+      </div>
+    </div>
+
+    <!-- HOME -->
+    <div class="screen" id="home">
+      <div class="topbar">
+        <div class="tb-logo"><em>G</em>Talk</div>
+        <div class="tb-r">
+          <div class="icon-btn" onclick="toggleTheme()">🌙</div>
+          <div class="icon-btn">🔔</div>
+        </div>
+      </div>
+      <div class="scroll" style="padding:0 20px 100px;">
+        <div class="welcome-msg fi">Olá, Alex! 👋</div>
+        <div class="welcome-sub fi">3 transcrições prontas para revisar.</div>
+        <div class="kpi-row fi">
+          <div class="kpi" style="--accent:var(--teal)"><div class="kpi-val" style="color:var(--teal)">28</div><div class="kpi-label">Transcrições</div></div>
+          <div class="kpi" style="--accent:var(--purple)"><div class="kpi-val" style="color:var(--purple)">14h</div><div class="kpi-label">Gravadas</div></div>
+          <div class="kpi" style="--accent:var(--pink)"><div class="kpi-val" style="color:var(--pink)">12</div><div class="kpi-label">Quizzes</div></div>
+          <div class="kpi" style="--accent:var(--amber)"><div class="kpi-val" style="color:var(--amber)">47</div><div class="kpi-label">Textos lidos</div></div>
+        </div>
+        <div class="quick-action-row fi">
+          <button class="qa" style="background:linear-gradient(135deg,var(--pink),var(--purple))" onclick="goScreen('record')"><div class="qa-icon">🎙️</div><div class="qa-label">Gravar</div></button>
+          <button class="qa" style="background:linear-gradient(135deg,var(--teal),var(--sky))" onclick="goScreen('tts')"><div class="qa-icon">🔊</div><div class="qa-label">GeniVoice</div></button>
+          <button class="qa" style="background:linear-gradient(135deg,var(--amber),var(--pink))" onclick="goScreen('library')"><div class="qa-icon">🗂️</div><div class="qa-label">Biblioteca</div></button>
+        </div>
+        <div class="sec-title fi">📄 Recentes</div>
+        <div class="recent-list fi">
+          <div class="rec-item">
+            <div class="ri-top"><div class="ri-title">Aula de Algoritmos - Aula 12</div><div class="ri-time">Hoje</div></div>
+            <div class="ri-preview">Grafos direcionados, algoritmo de Dijkstra e aplicações em redes e mapas...</div>
+            <div class="ri-actions">
+              <button class="ri-btn btn-play" onclick="goScreen('tts')">▶ Ouvir</button>
+              <button class="ri-btn btn-quiz" onclick="toast('🎯 Quiz gerado no GeniUs!')">⚡ Quiz</button>
+            </div>
+          </div>
+          <div class="rec-item">
+            <div class="ri-top"><div class="ri-title">Palestra — Cloud Computing</div><div class="ri-time">Ontem</div></div>
+            <div class="ri-preview">IaaS, PaaS e SaaS. Comparação entre AWS, Azure e Google Cloud...</div>
+            <div class="ri-actions">
+              <button class="ri-btn btn-play" onclick="goScreen('tts')">▶ Ouvir</button>
+              <button class="ri-btn btn-quiz" onclick="toast('🎯 Quiz gerado!')">⚡ Quiz</button>
+            </div>
+          </div>
+          <div class="rec-item">
+            <div class="ri-top"><div class="ri-title">Cálculo I — Derivadas</div><div class="ri-time">3 dias</div></div>
+            <div class="ri-preview">Regras de derivação: produto, quociente e cadeia. Exercícios com funções trigonométricas...</div>
+            <div class="ri-actions">
+              <button class="ri-btn btn-play" onclick="goScreen('tts')">▶ Ouvir</button>
+              <button class="ri-btn btn-quiz" onclick="toast('🎯 Quiz gerado!')">⚡ Quiz</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECORD -->
+    <div class="screen" id="record">
+      <div class="topbar">
+        <div class="icon-btn" onclick="navTo('home')" style="margin-right:4px">←</div>
+        <div class="tb-logo" style="font-size:18px"><em>G</em>Talk · Gravar</div>
+        <div style="width:36px;"></div>
+      </div>
+      <div class="scroll" style="padding:0 20px 100px;">
+        <div class="rec-center fi">
+          <button class="big-btn" id="bigRecBtn" onclick="toggleRec()">🎙️</button>
+          <div class="rec-title" id="recTitle">Clique para gravar</div>
+          <div class="rec-timer" id="recTimer">00:00</div>
+          <div class="wave-row" id="waveRow"></div>
+        </div>
+        <div class="rec-tip fi">
+          <div class="rt-title">💡 Dicas para melhor qualidade</div>
+          <div class="rt-item">🔇 Evite ambientes com ruído de fundo</div>
+          <div class="rt-item">🎤 Fale a 15-20cm do microfone</div>
+          <div class="rt-item">🗣️ Fale de forma clara e pausada</div>
+        </div>
+        <div class="upload-box fi" onclick="toast('📁 Arquivo enviado para transcrição!')">
+          <div class="ub-icon">📁</div>
+          <div class="ub-text">Enviar arquivo de áudio</div>
+          <div class="ub-sub">MP3, WAV, M4A, AAC</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIBRARY -->
+    <div class="screen" id="library">
+      <div class="topbar">
+        <div class="tb-logo"><em>G</em>Talk · Biblioteca</div>
+        <div class="tb-r"><div class="icon-btn" onclick="toggleTheme()">🌙</div></div>
+      </div>
+      <div class="scroll" style="padding:0 20px 100px;">
+        <div class="search-bar fi">
+          <span>🔍</span>
+          <input type="text" placeholder="Pesquisar transcrições...">
+        </div>
+        <div class="lib-folders fi">
+          <div class="lib-folder" onclick="toast('📚 Algoritmos')"><div class="lf-icon">💻</div><div class="lf-name">Algoritmos</div><div class="lf-count">8 arquivos</div></div>
+          <div class="lib-folder" onclick="toast('🔢 Cálculo')"><div class="lf-icon">🔢</div><div class="lf-name">Cálculo I</div><div class="lf-count">5 arquivos</div></div>
+          <div class="lib-folder" onclick="toast('⚗️ Física')"><div class="lf-icon">⚗️</div><div class="lf-name">Física</div><div class="lf-count">6 arquivos</div></div>
+          <div class="lib-folder" onclick="toast('🌐 Redes')"><div class="lf-icon">🌐</div><div class="lf-name">Redes</div><div class="lf-count">4 arquivos</div></div>
+        </div>
+        <div class="sec-title fi">Todas as Transcrições</div>
+        <div class="recent-list fi">
+          <div class="rec-item"><div class="ri-top"><div class="ri-title">Aula de Algoritmos - Aula 12</div><div class="ri-time">Hoje · 1h20</div></div><div class="ri-preview">Grafos, Dijkstra, menor caminho...</div><div class="ri-actions"><button class="ri-btn btn-play" onclick="goScreen('tts')">▶ Ouvir</button><button class="ri-btn btn-quiz" onclick="toast('🎯 Quiz gerado!')">⚡ Quiz</button></div></div>
+          <div class="rec-item"><div class="ri-top"><div class="ri-title">Palestra — Cloud Computing</div><div class="ri-time">Ontem · 45min</div></div><div class="ri-preview">IaaS, PaaS, SaaS, AWS, Azure...</div><div class="ri-actions"><button class="ri-btn btn-play" onclick="goScreen('tts')">▶ Ouvir</button><button class="ri-btn btn-quiz" onclick="toast('🎯 Quiz!')">⚡ Quiz</button></div></div>
+          <div class="rec-item"><div class="ri-top"><div class="ri-title">Cálculo I — Derivadas</div><div class="ri-time">3 dias · 2h</div></div><div class="ri-preview">Produto, quociente, cadeia...</div><div class="ri-actions"><button class="ri-btn btn-play" onclick="goScreen('tts')">▶ Ouvir</button><button class="ri-btn btn-quiz" onclick="toast('🎯 Quiz!')">⚡ Quiz</button></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TTS -->
+    <div class="screen" id="tts">
+      <div class="topbar">
+        <div class="icon-btn" onclick="navTo('home')" style="margin-right:4px">←</div>
+        <div class="tb-logo" style="font-size:18px"><em>G</em>eniVoice</div>
+        <div style="width:36px;"></div>
+      </div>
+      <div class="scroll" style="padding:0 20px 100px;">
+        <div class="tts-area fi">
+          <div class="tts-label">Texto para ouvir</div>
+          <textarea id="ttsText" placeholder="Cole ou escreva o texto que deseja ouvir...">A inteligência artificial está transformando a educação ao personalizar a experiência de aprendizagem. Com machine learning, é possível identificar os pontos fortes e fracos de cada estudante e criar materiais sob medida.</textarea>
+        </div>
+        <div class="sec-title fi">🎤 Voz</div>
+        <div class="voice-chips fi">
+          <div class="vc active" onclick="setVoice(this)">👩 Feminina</div>
+          <div class="vc" onclick="setVoice(this)">👨 Masculina</div>
+          <div class="vc" onclick="setVoice(this)">🧒 Infantil</div>
+        </div>
+        <div class="speed-row fi">
+          <span>⚡ Velocidade</span>
+          <input type="range" min="0.5" max="2" step="0.1" value="1" oninput="document.getElementById('spd').textContent=parseFloat(this.value).toFixed(1)+'x'">
+          <span class="speed-val" id="spd">1.0x</span>
+        </div>
+        <button class="tts-play-btn fi" onclick="playTTS()">▶ Ouvir com GeniVoice</button>
+        <div class="playing-pill" id="playPill">
+          <div class="pp-bars">
+            <div class="pp-bar" style="--h:14px"></div>
+            <div class="pp-bar" style="--h:20px;animation-delay:.1s"></div>
+            <div class="pp-bar" style="--h:10px;animation-delay:.2s"></div>
+            <div class="pp-bar" style="--h:18px;animation-delay:.3s"></div>
+            <div class="pp-bar" style="--h:14px;animation-delay:.4s"></div>
+          </div>
+          <span class="pp-text">Reproduzindo...</span>
+          <button class="pp-stop" onclick="stopTTS()">⏹</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="screen" id="profile">
+      <div class="scroll">
+        <div class="pf-header">
+          <div class="pf-av">A</div>
+          <div class="pf-name">Alex Estudante</div>
+          <div class="pf-tag">🎙️ 28 transcrições · 14h gravadas</div>
+          <div class="pf-stats">
+            <div class="pfs-item"><div class="pfs-val" style="color:var(--teal)">28</div><div class="pfs-label">Transcrições</div></div>
+            <div class="pfs-item"><div class="pfs-val" style="color:var(--purple)">12</div><div class="pfs-label">Quizzes</div></div>
+            <div class="pfs-item"><div class="pfs-val" style="color:var(--amber)">47</div><div class="pfs-label">Lidos</div></div>
+          </div>
+        </div>
+        <div class="pf-section">
+          <div class="pfs-sec-title">Configurações</div>
+          <div class="th-row">
+            <div class="pr-ico" style="background:rgba(0,217,181,.1)">🌙</div>
+            <div class="pr-t"><div class="pr-name">Modo Escuro</div></div>
+            <div class="toggle on" id="thToggle" onclick="toggleTheme()"><div class="toggle-k"></div></div>
+          </div>
+          <div class="pf-row" onclick="toast('🔔 Notificações')"><div class="pr-ico" style="background:rgba(255,64,129,.1)">🔔</div><div class="pr-t"><div class="pr-name">Notificações</div><div class="pr-sub">Alertas de transcrição concluída</div></div><div class="pr-arr">›</div></div>
+          <div class="pf-row" onclick="toast('⚙️ Configurações de voz')"><div class="pr-ico" style="background:rgba(139,92,246,.1)">🎤</div><div class="pr-t"><div class="pr-name">Preferências de Voz</div><div class="pr-sub">Idioma e velocidade padrão</div></div><div class="pr-arr">›</div></div>
+        </div>
+        <div class="pf-section" style="margin-top:16px;">
+          <div class="pfs-sec-title">Apps GeniUs</div>
+          <div class="pf-row" onclick="toast('🎮 GeniUs...')"><div class="pr-ico" style="background:rgba(255,107,0,.1)">🎮</div><div class="pr-t"><div class="pr-name">GeniUs</div><div class="pr-sub">Plataforma gamificada</div></div><div class="pr-arr">›</div></div>
+          <div class="pf-row" onclick="toast('📊 GLevel...')"><div class="pr-ico" style="background:rgba(181,255,45,.1)">📊</div><div class="pr-t"><div class="pr-name">GLevel</div><div class="pr-sub">Dashboard de desempenho</div></div><div class="pr-arr">›</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bottom-nav" id="bottomNav" style="display:none;">
+    <div class="bn-item active" id="bn-home" onclick="navTo('home')"><div class="bn-icon">🏠</div>Início</div>
+    <div class="bn-item" id="bn-record" onclick="navTo('record')"><div class="bn-icon">🎙️</div>Gravar</div>
+    <div class="bn-item" id="bn-library" onclick="navTo('library')"><div class="bn-icon">🗂️</div>Biblioteca</div>
+    <div class="bn-item" id="bn-tts" onclick="navTo('tts')"><div class="bn-icon">🔊</div>Voz</div>
+    <div class="bn-item" id="bn-profile" onclick="navTo('profile')"><div class="bn-icon">👤</div>Perfil</div>
+  </div>
+  <div class="toasts" id="toasts"></div>
+</div>
+<script>
+let isDark=true,isRec=false,recSecs=0,recInt=null,obIdx=0;
+
+function goScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const showNav=['home','library','tts','profile','record'];
+  document.getElementById('bottomNav').style.display=showNav.includes(id)?'flex':'none';
+}
+function navTo(id){
+  goScreen(id);
+  document.querySelectorAll('.bn-item').forEach(b=>b.classList.remove('active'));
+  const el=document.getElementById('bn-'+id);if(el)el.classList.add('active');
+}
+function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.getElementById('toasts').appendChild(t);setTimeout(()=>t.remove(),2800);}
+function toggleTheme(){isDark=!isDark;document.body.classList.toggle('light',!isDark);document.querySelectorAll('.toggle').forEach(t=>t.classList.toggle('on',isDark));}
+function goAuth(){goScreen('auth');}
+function doLogin(){goScreen('home');navTo('home');toast('🎉 Bem-vindo ao GTalk!');}
+function authTab(t){
+  document.getElementById('ab-li').classList.toggle('hide',t!=='li');
+  document.getElementById('ab-su').classList.toggle('hide',t!=='su');
+  document.getElementById('at-li').classList.toggle('active',t==='li');
+  document.getElementById('at-su').classList.toggle('active',t==='su');
+}
+function obNext(){
+  obIdx++;
+  if(obIdx>=3){goAuth();return;}
+  document.getElementById('obSlides').style.transform=`translateX(-${obIdx*33.333}%)`;
+  document.querySelectorAll('.ob-dot').forEach((d,i)=>d.classList.toggle('active',i===obIdx));
+  if(obIdx===2)document.getElementById('obBtn').textContent='Começar agora 🚀';
+}
+function toggleRec(){
+  isRec=!isRec;
+  const btn=document.getElementById('bigRecBtn');
+  const title=document.getElementById('recTitle');
+  if(isRec){
+    btn.classList.add('recording');btn.textContent='⏹';title.textContent='Gravando...';
+    recInt=setInterval(()=>{recSecs++;document.getElementById('recTimer').textContent=`${String(Math.floor(recSecs/60)).padStart(2,'0')}:${String(recSecs%60).padStart(2,'0')}`;buildWave(true);},1000);
+  }else{
+    btn.classList.remove('recording');btn.textContent='🎙️';title.textContent='Transcrevendo...';
+    clearInterval(recInt);recSecs=0;document.getElementById('recTimer').textContent='00:00';buildWave(false);
+    setTimeout(()=>{title.textContent='Clique para gravar';toast('✅ Transcrição salva com sucesso!');},2000);
+  }
+}
+function buildWave(active){
+  const c=document.getElementById('waveRow');c.innerHTML='';
+  for(let i=0;i<22;i++){
+    const b=document.createElement('div');b.className='wv-bar';
+    const h=active?(Math.random()*30+8):6;
+    const colors=['#00D9B5','#8B5CF6','#FF4081'];
+    b.style.cssText=`height:${h}px;--h:${h}px;background:${colors[i%3]};animation-delay:${(i*0.06).toFixed(2)}s;opacity:${active?1:.4}`;
+    c.appendChild(b);
+  }
+}
+buildWave(false);
+function setVoice(el){document.querySelectorAll('.vc').forEach(v=>v.classList.remove('active'));el.classList.add('active');}
+let ttsPlaying=false;
+function playTTS(){ttsPlaying=true;document.getElementById('playPill').classList.add('on');toast('🔊 GeniVoice reproduzindo...');}
+function stopTTS(){ttsPlaying=false;document.getElementById('playPill').classList.remove('on');}
+function updateTime(){const n=new Date();document.getElementById('sbTime').textContent=`${n.getHours()}:${String(n.getMinutes()).padStart(2,'0')}`;}
+updateTime();setInterval(updateTime,10000);
+setTimeout(()=>goScreen('onboard'),2300);
+</script>
+</body>
+</html>
