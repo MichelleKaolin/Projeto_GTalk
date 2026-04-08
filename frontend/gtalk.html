@@ -241,15 +241,15 @@ textarea:focus{border-color:var(--teal);}
       <button class="tab" id="t-signup" onclick="switchT('signup')">Cadastrar</button>
     </div>
     <div id="f-login" style="width:100%">
-      <div class="fg"><label>Email</label><input type="email" placeholder="seu@email.com"></div>
-      <div class="fg"><label>Senha</label><input type="password" placeholder="••••••••"></div>
+      <div class="fg"><label>Email</label><input type="email" id="login-email" placeholder="seu@email.com"></div>
+      <div class="fg"><label>Senha</label><input type="password" id="login-password" placeholder="••••••••"></div>
       <button class="submit-btn" onclick="login()">Entrar no GTalk →</button>
     </div>
     <div id="f-signup" style="width:100%;display:none">
-      <div class="fg"><label>Nome</label><input type="text" placeholder="Seu nome"></div>
-      <div class="fg"><label>Email</label><input type="email" placeholder="seu@email.com"></div>
-      <div class="fg"><label>Senha</label><input type="password" placeholder="Mínimo 8 caracteres"></div>
-      <button class="submit-btn" onclick="login()">Criar conta grátis 🎙️</button>
+      <div class="fg"><label>Nome</label><input type="text" id="signup-name" placeholder="Seu nome"></div>
+      <div class="fg"><label>Email</label><input type="email" id="signup-email" placeholder="seu@email.com"></div>
+      <div class="fg"><label>Senha</label><input type="password" id="signup-password" placeholder="Mínimo 8 caracteres"></div>
+      <button class="submit-btn" onclick="signup()">Criar conta grátis 🎙️</button>
     </div>
   </div>
 </div>
@@ -261,7 +261,7 @@ textarea:focus{border-color:var(--teal);}
     <div class="tb-r">
       <button class="theme-btn" onclick="toggleTheme()">🌙</button>
       <div class="icon-btn">🔔</div>
-      <div class="avatar" onclick="goPage('landing')">A</div>
+      <div class="avatar" onclick="doLogout()">A</div>
     </div>
   </div>
   <div class="layout">
@@ -269,7 +269,7 @@ textarea:focus{border-color:var(--teal);}
       <div class="ns">Principal</div>
       <div class="ni active" onclick="sv('home')"><span class="ni-icon">🏠</span> Início</div>
       <div class="ni" onclick="sv('gravar')"><span class="ni-icon">🎙️</span> Gravar</div>
-      <div class="ni" onclick="sv('transcrições')"><span class="ni-icon">📄</span> Transcrições</div>
+      <div class="ni" onclick="sv('transcricoes')"><span class="ni-icon">📄</span> Transcrições</div>
       <div class="ni" onclick="sv('tts')"><span class="ni-icon">🔊</span> GeniVoice</div>
       <div class="ni" onclick="sv('biblioteca')"><span class="ni-icon">🗂️</span> Biblioteca</div>
       <div class="ns">Apps</div>
@@ -281,18 +281,19 @@ textarea:focus{border-color:var(--teal);}
       <!-- HOME -->
       <div class="view active" id="v-home">
         <div class="fu" style="margin-bottom:28px;">
-          <div style="font-family:'Fraunces',sans-serif;font-size:28px;font-weight:900;">Olá, Alex! 👋</div>
-          <div style="color:var(--text2);margin-top:6px;">Você tem 3 transcrições prontas para revisar.</div>
+          <div id="user-greeting" style="font-family:'Fraunces',sans-serif;font-size:28px;font-weight:900;">Olá! 👋</div>
+          <div style="color:var(--text2);margin-top:6px;">Veja suas estatísticas e transcrições recentes.</div>
         </div>
-        <div class="stats">
-          <div class="sc fu"><div class="sc-label">Transcrições</div><div class="sc-val c-teal">28</div></div>
-          <div class="sc fu d1"><div class="sc-label">Horas gravadas</div><div class="sc-val c-purple">14h</div></div>
-          <div class="sc fu d2"><div class="sc-label">Quizzes gerados</div><div class="sc-val c-pink">12</div></div>
-          <div class="sc fu d3"><div class="sc-label">Textos lidos</div><div class="sc-val c-amber">47</div></div>
+        <div class="stats" id="dash-stats">
+          <div class="sc fu"><div class="sc-label">Transcrições</div><div class="sc-val c-teal" id="stat-transcriptions">-</div></div>
+          <div class="sc fu d1"><div class="sc-label">Horas gravadas</div><div class="sc-val c-purple" id="stat-hours">-</div></div>
+          <div class="sc fu d2"><div class="sc-label">Textos lidos (TTS)</div><div class="sc-val c-pink" id="stat-tts">-</div></div>
+          <div class="sc fu d3"><div class="sc-label">Palavras transcritas</div><div class="sc-val c-amber" id="stat-words">-</div></div>
         </div>
         <div class="sec-title fu">📄 Recentes</div>
-        <div class="tr-card fu"><div class="tr-header"><div class="tr-title">Aula de Algoritmos - Aula 12</div><div class="tr-time">Hoje, 10:32</div></div><div class="tr-text">Discussão sobre grafos direcionados e não-direcionados, algoritmo de Dijkstra para menor caminho e aplicações práticas em redes e mapas...</div><div class="tr-actions"><button class="ta-btn ta-play" onclick="sv('tts')">▶ Ouvir</button><button class="ta-btn ta-quiz" onclick="toast('🎯 Quiz gerado no GeniUs!')">⚡ Gerar Quiz</button></div></div>
-        <div class="tr-card fu d1"><div class="tr-header"><div class="tr-title">Palestra — Computação em Nuvem</div><div class="tr-time">Ontem, 14:15</div></div><div class="tr-text">Conceitos de cloud computing: IaaS, PaaS e SaaS. Comparação entre os principais provedores AWS, Azure e Google Cloud Platform...</div><div class="tr-actions"><button class="ta-btn ta-play" onclick="sv('tts')">▶ Ouvir</button><button class="ta-btn ta-quiz" onclick="toast('🎯 Quiz gerado no GeniUs!')">⚡ Gerar Quiz</button></div></div>
+        <div id="recent-list">
+          <div style="color:var(--text2);padding:20px;">Carregando transcrições recentes...</div>
+        </div>
       </div>
 
       <!-- GRAVAR -->
@@ -324,15 +325,15 @@ textarea:focus{border-color:var(--teal);}
       </div>
 
       <!-- TRANSCRIÇÕES -->
-      <div class="view" id="v-transcrições">
+      <div class="view" id="v-transcricoes">
         <div class="sec-title fu">📄 Todas as Transcrições</div>
         <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
-          <input type="text" placeholder="🔍 Pesquisar transcrições..." style="flex:1;min-width:200px;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);background:var(--bg3);color:var(--text);font-family:'Space Grotesk',sans-serif;outline:none;">
+          <input type="text" id="search-transcriptions" placeholder="🔍 Pesquisar transcrições..." oninput="loadTranscriptionsList()" style="flex:1;min-width:200px;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);background:var(--bg3);color:var(--text);font-family:'Space Grotesk',sans-serif;outline:none;">
           <button class="btn btn-teal" onclick="sv('gravar')">+ Nova transcrição</button>
         </div>
-        <div class="tr-card fu"><div class="tr-header"><div class="tr-title">Aula de Algoritmos - Aula 12</div><div class="tr-time">Hoje · 1h20min</div></div><div class="tr-text">Discussão sobre grafos direcionados e não-direcionados, algoritmo de Dijkstra para menor caminho e aplicações práticas...</div><div class="tr-actions"><button class="ta-btn ta-play" onclick="sv('tts')">▶ Ouvir</button><button class="ta-btn ta-quiz" onclick="toast('🎯 Quiz gerado!')">⚡ Quiz</button><button class="ta-btn ta-del" onclick="toast('🗑️ Removido')">🗑️</button></div></div>
-        <div class="tr-card fu d1"><div class="tr-header"><div class="tr-title">Palestra — Cloud Computing</div><div class="tr-time">Ontem · 45min</div></div><div class="tr-text">Conceitos de cloud computing: IaaS, PaaS e SaaS. AWS, Azure e Google Cloud Platform comparados...</div><div class="tr-actions"><button class="ta-btn ta-play">▶ Ouvir</button><button class="ta-btn ta-quiz" onclick="toast('🎯 Quiz gerado!')">⚡ Quiz</button><button class="ta-btn ta-del" onclick="toast('🗑️ Removido')">🗑️</button></div></div>
-        <div class="tr-card fu d2"><div class="tr-header"><div class="tr-title">Cálculo I — Derivadas</div><div class="tr-time">3 dias atrás · 2h</div></div><div class="tr-text">Regras de derivação: produto, quociente e cadeia. Exercícios de aplicação com funções trigonométricas e exponenciais...</div><div class="tr-actions"><button class="ta-btn ta-play">▶ Ouvir</button><button class="ta-btn ta-quiz" onclick="toast('🎯 Quiz gerado!')">⚡ Quiz</button><button class="ta-btn ta-del" onclick="toast('🗑️ Removido')">🗑️</button></div></div>
+        <div id="transcriptions-list">
+          <div style="color:var(--text2);padding:20px;">Carregando transcrições...</div>
+        </div>
       </div>
 
       <!-- TTS -->
